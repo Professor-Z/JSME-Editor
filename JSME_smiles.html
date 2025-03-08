@@ -1,0 +1,44 @@
+<html>
+
+<head>
+    <script type="text/javascript" language="javascript" src="jsme/jsme.nocache.js"></script>
+
+    <script>
+        let jsmeApplet;
+
+        function jsmeOnLoad() {
+            // Initialize JSME
+            jsmeApplet = new JSApplet.JSME("jsme_container", "320px", "240px");
+
+            // Override the default drag-and-drop functionality to force SMILES format
+            const container = document.getElementById("jsme_container");
+            
+            // Adding custom behavior for drag-and-drop
+            container.ondragstart = function (event) {
+                const smiles = jsmeApplet.smiles();  // Get the SMILES string of the molecule
+                event.dataTransfer.setData("text/plain", smiles);  // Set the dragged data to SMILES format
+            };
+
+            // Setting up event listener for copy to ensure it copies SMILES format
+            document.addEventListener("copy", function (event) {
+                const smiles = jsmeApplet.smiles();  // Get the SMILES string
+                event.clipboardData.setData("text/plain", smiles);  // Set the clipboard to SMILES
+                event.preventDefault();  // Prevent default copy behavior
+            });
+        }
+
+        function resize() {
+            jsmeApplet.setSize("640px", "480px");
+        }
+    </script>
+</head>
+
+<body onload="jsmeOnLoad()">
+
+    <div id="jsme_container"></div>
+
+    <button onclick="resize(); return false;">Resize</button>
+
+</body>
+
+</html>
