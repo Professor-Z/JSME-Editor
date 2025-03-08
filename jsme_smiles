@@ -1,0 +1,32 @@
+<html>
+
+<head>
+    <script type="text/javascript" language="javascript" src="jsme/jsme.nocache.js"></script>
+
+    <script>
+        // This function will be called after the JavaScriptApplet code has been loaded.
+        function jsmeOnLoad() {
+            // Initialize JSME with default clipboard format set to SMILES
+            jsmeApplet = new JSApplet.JSME("jsme_container", "320px", "240px", {
+                "clipformat": "smiles"  // Ensures SMILES is the default copy-paste format
+            });
+
+            // Ensure SMILES format is used when copying or dragging molecules
+            jsmeApplet.setClipboardMol("smiles");
+        }
+
+        function resize() {
+            jsmeApplet.setSize("640px", "480px");
+        }
+    </script>
+</head>
+
+<body onload="jsmeOnLoad()">
+
+    <div id="jsme_container"></div>
+
+    <button onclick="resize(); return false;">Resize</button>
+
+</body>
+
+</html>
