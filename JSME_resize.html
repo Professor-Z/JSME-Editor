@@ -6,7 +6,9 @@
     <script>
         //this function will be called after the JavaScriptApplet code has been loaded.
         function jsmeOnLoad() {
-            jsmeApplet = new JSApplet.JSME("jsme_container", "320px", "240px");
+            jsmeApplet = new JSApplet.JSME("jsme_container", "320px", "240px", {
+        "options": "query, noimplicitH, no_popup",
+        "customQuery": "mol:SMILES");
 
         }
     </script>
@@ -23,19 +25,6 @@
         this.jsmeApplet.setSize("640px", "480px");
     }
 </script>
-
-<div align="center">
-Select default copy format for Ctrl C and Drag&Drop:
-    <br>
-    <select name="copy_format" id="copy_format">
-    <option value="" selected="selected">Select format</option>
-</select>
-    <br><br>
-
-    Known issue: some formats (e.g InChi) require loading of additional JavaScript code. The first time such a format is requested, the copy or
-drag will not work correctly because of loading of JavaScript code.
-<br><br>
-</div>
 
 </body>
 </html>
