@@ -6,7 +6,7 @@
   <script type="text/javascript" src="jsme/jsme.nocache.js"></script>
   <script type="text/javascript">
     function jsmeOnLoad() {
-      // Initialize JSME with drag-and-drop and clipboard copy enabled
+      // Force SMILES output for clipboard and drag-and-drop
       new JSApplet.JSME("jsme_container", "500px", "400px", {
         options: "paste,copy,exportAs=smiles,clipboardOutput=smiles"
       });
@@ -17,7 +17,7 @@
   <h2>Draw your molecule and press Ctrl+C or use the copy icon to copy the SMILES string</h2>
   <div id="jsme_container" style="border: 1px solid #ccc;"></div>
   <p style="margin-top: 10px;">
-    After copying the SMILES, paste it into the Canvas quiz box to answer the question.
+    After copying, paste the SMILES string into the Canvas quiz answer box.
   </p>
 </body>
 </html>
