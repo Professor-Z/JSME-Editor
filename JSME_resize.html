@@ -1,29 +1,65 @@
+<!DOCTYPE html>
 <html>
-
 <head>
-    <script type="text/javascript" language="javascript" src="jsme/jsme.nocache.js"></script>
+  <meta charset="UTF-8">
+  <title>JSME Submit - Working Version</title>
 
-    <script>
-        //this function will be called after the JavaScriptApplet code has been loaded.
-        function jsmeOnLoad() {
-            jsmeApplet = new JSApplet.JSME("jsme_container", "320px", "240px");
+  <script type="text/javascript" src="jsme/jsme.nocache.js"></script>
 
-        }
-    </script>
+  <script type="text/javascript">
+    let jsmeApplet;
+
+    // Called automatically by the JSME loader
+    function jsmeOnLoad() {
+      jsmeApplet = new JSApplet.JSME("jsme_container", "320px", "240px");
+
+      // Once loaded, show the form
+      document.getElementById("form_container").style.display = "block";
+    }
+
+    function resize() {
+      if (jsmeApplet) {
+        jsmeApplet.setSize("640px", "480px");
+      }
+    }
+
+    function submitSMILES() {
+      const smiles = jsmeApplet.smiles();
+      const name = document.getElementById("studentName").value;
+
+      if (!name || !smiles) {
+        alert("Please enter your name and draw a molecule.");
+        return;
+      }
+
+      fetch("https://script.google.com/macros/s/AKfycby8s1AUQMW6lCmBJ9k9NtjP97JYQxh-VqPUJr-2LF7GTjPmFT0b_3D3PKS4YrqxM3jK/exec", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, smiles })
+      })
+      .then(response => response.text())
+      .then(result => alert("Submission successful!"))
+      .catch(error => alert("Error: " + error));
+    }
+  </script>
 </head>
 
 <body>
 
-<div id="jsme_container"></div>
+  <h2>Draw your molecule</h2>
 
-<button onclick="resize(); return false;">Resize</button>
+  <!-- JSME editor -->
+  <div id="jsme_container" style="border:1px solid #ccc;"></div>
+  <button onclick="resize(); return false;">Resize</button>
 
-<script language="javascript">
-    function resize() {
-        this.jsmeApplet.setSize("640px", "480px");
-    }
-</script>
-
+  <!-- Form (initially hidden until editor loads) -->
+  <div id="form_container" style="display:none; margin-top:20px;">
+    <p>
+      <label for="studentName">Your Name:</label>
+      <input type="text" id="studentName" placeholder="e.g., Alex Johnson">
+    </p>
+    <button onclick="submitSMILES()">Submit</button>
+  </div>
 
 </body>
 </html>
