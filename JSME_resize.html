@@ -2,28 +2,19 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>JSME Submit - Working Version</title>
+  <title>JSME Form Submit</title>
 
   <script type="text/javascript" src="jsme/jsme.nocache.js"></script>
 
   <script type="text/javascript">
     let jsmeApplet;
 
-    // Called automatically by the JSME loader
     function jsmeOnLoad() {
       jsmeApplet = new JSApplet.JSME("jsme_container", "320px", "240px");
-
-      // Once loaded, show the form
       document.getElementById("form_container").style.display = "block";
     }
 
-    function resize() {
-      if (jsmeApplet) {
-        jsmeApplet.setSize("640px", "480px");
-      }
-    }
-
-    function submitSMILES() {
+    function submitForm() {
       const smiles = jsmeApplet.smiles();
       const name = document.getElementById("studentName").value;
 
@@ -32,14 +23,10 @@
         return;
       }
 
-      fetch("https://script.google.com/macros/s/AKfycby8s1AUQMW6lCmBJ9k9NtjP97JYQxh-VqPUJr-2LF7GTjPmFT0b_3D3PKS4YrqxM3jK/exec", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, smiles })
-      })
-      .then(response => response.text())
-      .then(result => alert("Submission successful!"))
-      .catch(error => alert("Error: " + error));
+      document.getElementById("hidden_name").value = name;
+      document.getElementById("hidden_smiles").value = smiles;
+
+      document.getElementById("smilesForm").submit();
     }
   </script>
 </head>
@@ -47,19 +34,22 @@
 <body>
 
   <h2>Draw your molecule</h2>
-
-  <!-- JSME editor -->
   <div id="jsme_container" style="border:1px solid #ccc;"></div>
-  <button onclick="resize(); return false;">Resize</button>
+  <button onclick="jsmeApplet.setSize('640px', '480px')">Resize</button>
 
-  <!-- Form (initially hidden until editor loads) -->
   <div id="form_container" style="display:none; margin-top:20px;">
     <p>
       <label for="studentName">Your Name:</label>
       <input type="text" id="studentName" placeholder="e.g., Alex Johnson">
     </p>
-    <button onclick="submitSMILES()">Submit</button>
+    <button onclick="submitForm()">Submit</button>
   </div>
+
+  <!-- Hidden form that will POST to Google Apps Script -->
+  <form id="smilesForm" method="POST" action="https://script.google.com/macros/s/AKfycby8s1AUQMW6lCmBJ9k9NtjP97JYQxh-VqPUJr-2LF7GTjPmFT0b_3D3PKS4YrqxM3jK/exec" target="_blank">
+    <input type="hidden" name="name" id="hidden_name">
+    <input type="hidden" name="smiles" id="hidden_smiles">
+  </form>
 
 </body>
 </html>
